@@ -17,7 +17,7 @@ public protocol PPBatchManagerDelegate: class {
 public class PPBatchManager {
     
     fileprivate let sizeStrategy: PPSizeBatchingStrategy
-    fileprivate let timeStrategy: PPTimeBatchingStrategy
+    fileprivate let timeStrategy: PPTimeBatchingStrategy?
     fileprivate let batchingQueue = DispatchQueue(label: "batching.library.queue")
     fileprivate var isUploadingEvents = false
     fileprivate var timer: Timer? = nil
@@ -28,14 +28,18 @@ public class PPBatchManager {
     
     public var debugEnabled = false
     
-    public init(sizeStrategy: PPSizeBatchingStrategy,  timeStrategy: PPTimeBatchingStrategy, dbName: String) {
-        self.sizeStrategy = sizeStrategy
-        self.timeStrategy = timeStrategy
+    public init(dbName: String, sizeStrategy: PPSizeBatchingStrategy,  timeStrategy: PPTimeBatchingStrategy?) {
+        
         self.dbName = dbName
         
         dataStoreController = PPBatchDataStoreController(dbName: dbName)
         
-        scheduleTimer()
+        self.sizeStrategy = sizeStrategy
+        
+        if let ts = timeStrategy {
+            self.timeStrategy = ts
+            scheduleTimer()
+        }
         
         //Flush when the class is initialised, this is to make sure that if app gets killed during flushing we retry immediately after launch
         flush(false)
