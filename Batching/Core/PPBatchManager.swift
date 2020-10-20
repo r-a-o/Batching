@@ -17,7 +17,7 @@ public protocol PPBatchManagerDelegate: class {
 public class PPBatchManager {
     
     fileprivate let sizeStrategy: PPSizeBatchingStrategy
-    fileprivate let timeStrategy: PPTimeBatchingStrategy?
+    fileprivate let timeStrategy: PPTimeBatchingStrategy? = nil
     fileprivate let batchingQueue = DispatchQueue(label: "batching.library.queue")
     fileprivate var isUploadingEvents = false
     fileprivate var timer: Timer? = nil
