@@ -176,11 +176,12 @@ public class PPBatchManager {
     fileprivate func scheduleTimer() {
         
         guard timer == nil else { return }
+        guard let timeStrategy = self.timeStrategy else { return }
         
         //Weakly wrapping self to avoid unnecessarily retaining self by Timer
         
         let weakSelf = PPBatchManagerWrapper(batchManager: self)
-        timer = Timer.scheduledTimer(timeInterval: self.timeStrategy.durationBeforeIngestion, target: weakSelf, selector: #selector(PPBatchManagerWrapper.timerFired), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: timeStrategy.durationBeforeIngestion, target: weakSelf, selector: #selector(PPBatchManagerWrapper.timerFired), userInfo: nil, repeats: true)
         
         if let timer = timer {
             RunLoop.main.add(timer, forMode: RunLoop.Mode.common)
