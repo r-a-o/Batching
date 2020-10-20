@@ -154,7 +154,7 @@ public class PPBatchManager {
         
     }
     
-    fileprivate func removeEventsWithIds(_ ids: [String], completion: @escaping (Void) -> Void) {
+    fileprivate func removeEventsWithIds(_ ids: [String], completion: @escaping () -> Void) {
         
         batchingQueue.async {
         
@@ -179,7 +179,7 @@ public class PPBatchManager {
         timer = Timer.scheduledTimer(timeInterval: self.timeStrategy.durationBeforeIngestion, target: weakSelf, selector: #selector(PPBatchManagerWrapper.timerFired), userInfo: nil, repeats: true)
         
         if let timer = timer {
-            RunLoop.main.add(timer, forMode: .commonModes)
+            RunLoop.main.add(timer, forMode: RunLoop.Mode.common)
         }
         
     }
